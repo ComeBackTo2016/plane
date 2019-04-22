@@ -223,4 +223,19 @@ void getStateData(Axis3f* acc, Axis3f* vel, Axis3f* pos)
 	pos->z = 1.0f * state.position.z;
 }
 
+void hyfgetStateDataAcc(Axis3f* acc)
+{
+	acc->x = 1.0f * state.acc.x;
+	acc->y = 1.0f * state.acc.y;
+	acc->z = 1.0f * state.acc.z;
+}
+
+void hyfgetStateDataPos(Axis3f* pos)
+{
+	pos->x = 1.0f * state.position.x;
+	pos->y = 1.0f * state.position.y;
+	pos->z = 1.0f * state.position.z;
+}
+
+
 
