@@ -83,10 +83,10 @@ static void inavFilterCorrectVel(int axis, float dt, float e, float w)
 }
 
 void positionEstimate(sensorData_t* sensorData, state_t* state, float dt) 
-{	
-	static float rangeLpf = 0.f;
+{
+	static float rangeLpf  = 0.f;
 	static float accLpf[3] = {0.f};		/*加速度低通*/	
-	float weight = wBaro;
+	float weight 		   = wBaro;
 
 	float relateHight = sensorData->baro.asl - startBaroAsl;	/*气压相对高度*/
 	
@@ -192,19 +192,19 @@ void positionEstimate(sensorData_t* sensorData, state_t* state, float dt)
 	
 	float errPosZ = fusedHeight - estimator.pos[Z];
 	
-	/* 位置预估: Z-axis */
+	/* 加速度计位置预估: Z-axis */
 	/* 	estimator.pos[axis] += estimator.vel[axis] * dt + acc * dt * dt / 2.0f;
 		estimator.vel[axis] += acc * dt; 
 	 */
 	inavFilterPredict(Z/*代表Z轴*/, dt, estimator.acc[Z]);
-	/* 位置校正: Z-axis */
+	/* 气压计位置校正: Z-axis (weight = wBaro;) */
 	/* 	float ewdt = e * w * dt;
 		estimator.pos[axis] += ewdt;
 		estimator.vel[axis] += w * ewdt;
 	 */
 	inavFilterCorrectPos(Z, dt, errPosZ, weight);
 
-	if(getModuleID() == OPTICAL_FLOW)	/*光流模块可用*/
+	if(getModuleID() == OPTICAL_FLOW)
 	{		
 //		float opflowDt = dt;
 //		
@@ -233,7 +233,9 @@ void positionEstimate(sensorData_t* sensorData, state_t* state, float dt)
 	Axis3f accelBiasCorr = {{ 0, 0, 0}};
 	
 	accelBiasCorr.z -= errPosZ  * sq(wBaro);
+	
 	float accelBiasCorrMagnitudeSq = sq(accelBiasCorr.x) + sq(accelBiasCorr.y) + sq(accelBiasCorr.z);
+	
 	if (accelBiasCorrMagnitudeSq < sq(INAV_ACC_BIAS_ACCEPTANCE_VALUE)) 
 	{
 		/* transform error vector from NEU frame to body frame */

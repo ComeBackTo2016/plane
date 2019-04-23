@@ -99,17 +99,19 @@ static void velocityController(float* thrust, attitude_t *attitude, setpoint_t *
 
 void positionController(float* thrust, attitude_t *attitude, setpoint_t *setpoint, const state_t *state, float dt)                                                
 {	
+	/* 位置控制计算输出作为速度控制量 */
 	if (setpoint->mode.x == modeAbs || setpoint->mode.y == modeAbs)
 	{
+		/* pidUpdate计算PID输出控制量, 第二个参数为误差 */
 		setpoint->velocity.x = 0.1f * pidUpdate(&pidX, setpoint->position.x - state->position.x);
 		setpoint->velocity.y = 0.1f * pidUpdate(&pidY, setpoint->position.y - state->position.y);
 	}
-	
 	if (setpoint->mode.z == modeAbs)
 	{
 		setpoint->velocity.z = pidUpdate(&pidZ, setpoint->position.z - state->position.z);
 	}
 	
+	/* 速度控制量输入，输出为姿态控制量 */
 	velocityController(thrust, attitude, setpoint, state);
 }
 

@@ -76,7 +76,7 @@ static void calBaseAcc(float* acc)	/*计算静态加速度*/
 	}	
 }
 
-/*计算旋转矩阵*/
+/*计算旋转矩阵38260*/
 void imuComputeRotationMatrix(void)
 {
     float q1q1 = q1 * q1;

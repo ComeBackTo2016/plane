@@ -87,6 +87,7 @@ void setFastAdjustPosParam(u16 velTimes, u16 absTimes, float height)
 /*快速调整高度*/
 static void fastAdjustPosZ(void)
 {	
+	/* velModeTimes 速率模式次数 */
 	if(velModeTimes > 0)
 	{
 		velModeTimes--;
@@ -94,10 +95,13 @@ static void fastAdjustPosZ(void)
 		
 		float baroVel = (sensorData.baro.asl - baroLast) / 0.004f;	/*250Hz*/
 		baroLast = sensorData.baro.asl;
+		
 		baroVelLpf += (baroVel - baroVelLpf) * 0.35f;
 
 		setpoint.mode.z = modeVelocity;
+		
 		state.velocity.z = baroVelLpf;		/*气压计融合*/
+		
 		setpoint.velocity.z = -1.0f * baroVelLpf;
 		
 		if(velModeTimes == 0)
@@ -178,10 +182,8 @@ void stabilizerTask(void* param)
 		anomalDetec(&sensorData, &state, &control);			
 		
 		/*PID控制*/	
-		
 		stateControl(&control, &sensorData, &state, &setpoint, tick);
 				
-		
 		//控制电机输出（500Hz）
 		if (RATE_DO_EXECUTE(RATE_500_HZ, tick))
 		{

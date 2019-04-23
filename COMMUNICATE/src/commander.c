@@ -105,16 +105,15 @@ static void ctrlDataUpdate(void)
 	if(isRCLocked == false)	/*解锁状态*/
 	{
 		ctrlVal_t ctrlVal =  nowCache->tarVal[nowCache->activeSide];	/*读取缓存*/
-		
 //		ctrlValLpf.thrust = ctrlVal.thrust;
 //		ctrlValLpf.pitch = ctrlVal.pitch;
 //		ctrlValLpf.roll = ctrlVal.roll;
 //		ctrlValLpf.yaw = ctrlVal.yaw;
 		
 		ctrlValLpf.thrust += (ctrlVal.thrust - ctrlValLpf.thrust) * lpfVal;
-		ctrlValLpf.pitch += (ctrlVal.pitch - ctrlValLpf.pitch) * lpfVal;
-		ctrlValLpf.roll += (ctrlVal.roll - ctrlValLpf.roll) * lpfVal;
-		ctrlValLpf.yaw += (ctrlVal.yaw - ctrlValLpf.yaw) * lpfVal;
+		ctrlValLpf.pitch  += (ctrlVal.pitch - ctrlValLpf.pitch)   * lpfVal;
+		ctrlValLpf.roll   += (ctrlVal.roll - ctrlValLpf.roll)     * lpfVal;
+		ctrlValLpf.yaw    += (ctrlVal.yaw - ctrlValLpf.yaw)       * lpfVal;
 		
 		configParam.trimP = ctrlVal.trimPitch;	/*更新微调值*/
 		configParam.trimR = ctrlVal.trimRoll;
